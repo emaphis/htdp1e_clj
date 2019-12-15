@@ -1,0 +1,42 @@
+How To Design Programs Notes
+
+* Terms
+Data -
+Concrete interpretation -
+Atomic Data - numbers, letters
+Compound data - number series, trees
+
+Operations
+- Primitive Operations - + 1 - / for numbers
+- Programs
+
+Expressions - pg 43
+- Atomic - numbers, variables
+- Compound - "(" expr ")"
+
+* Recipe
+** Basic
+1. Problem Analysis & Data Definition
+2. Contract, Purpose & Effect Statements, Header
+3. Examples
+4. Function Template
+5. Function Definition
+6. Tests
+
+** Designing Programs
+
+** Designing Conditional Functions
+
+** Designing Functions for Compound Data
+
+** Designing Functions for Mixed Data
+
+** Designing Functions for Self-Referential Data Definitions
+
+** Designing Complex Programs
+
+** Designing Functions for Mutually Referential Definitions
+
+** Designing Functions that Consume Two Complex Inputs
+
+** Designing Abstractions with Functions-as-Values

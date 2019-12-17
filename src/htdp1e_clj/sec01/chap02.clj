@@ -1,4 +1,6 @@
-(ns htdp1e-clj.sec01.chap02)
+(ns htdp1e-clj.sec01.chap02
+  (:require [clojure.test :refer :all]
+            [same :refer [ish? zeroish?]]))
 
 ;;;; I Processing Simple Forms of Data
 ;;;; 2 Number, Expressions, Simple Programs
@@ -328,4 +330,25 @@
 (defn somef [x]
   (Math/sin x x))
 
+
+;;;; 2.5 Designing Programs
+
+;; Contract:
+;; area-of-ring : number number -> number
+
+;; Purpose:
+;; Compute the area of a ring whose radius is
+;; `outer` and whose hole has a radius of `inner`
+
+;; Example:
+;; (area-of ring 5 3) is 50.24
+
+;; Definition:
+(defn area-of-ring [outer inner]
+  (- (area-of-disk outer)
+     (area-of-disk inner)))
+
+;; Test
+(deftest test-area-of-ring
+  (is (ish? 50.24 (area-of-ring 5 3))))
 

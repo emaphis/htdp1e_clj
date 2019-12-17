@@ -351,4 +351,3 @@
 ;; Test
 (deftest test-area-of-ring
   (is (ish? 50.24 (area-of-ring 5 3))))
-

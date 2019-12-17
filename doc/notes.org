@@ -25,6 +25,45 @@ Expressions - pg 43
 
 ** Designing Programs
 
+| Phase    | Goal                       | Activity                             |
+|----------+----------------------------+--------------------------------------|
+| Contract | to name the function;      | choose a name that fits the problem  |
+| Purpose  | to specify its classes of  | • study the problem for clues on     |
+| and      | input data and its         | how many unknown U givens" the       |
+| Header   | class of output data;      | function consumes . pick one         |
+|          | to describe its purpose;   | variable per input; if possible, use |
+|          | to formulate a header      | names that are mentioned for the     |
+|          |                            | U givens" in the problem statement   |
+|          |                            | • describe what the function should  |
+|          |                            | produce using the chosen variables   |
+|          |                            | names . formulate the contract and   |
+|          |                            | header:                              |
+|          |                            | ;; name: number ... -> number        |
+|          |                            | ;; to compute ... from xl ...        |
+|          |                            | (defn [name (xl ... ) ... )          |
+|          |                            |                                      |
+|----------+----------------------------+--------------------------------------|
+| Examples | to characterize the input- | search the problem statement for     |
+|          | output relationship via    | examples . work through the          |
+|          | examples                   | examples . validate the results, if  |
+|          |                            | possible . make up examples          |
+|----------+----------------------------+--------------------------------------|
+| Body     | to define the function     | formulate how the function           |
+|          |                            | computes its results . develop a     |
+|          |                            | Scheme expression that uses          |
+|          |                            | Scheme's primitive operations,       |
+|          |                            | other functions, and the variables . |
+|          |                            | translate the mathematical           |
+|          |                            | expressions in the problem           |
+|          |                            | statement, when available            |
+|----------+----------------------------+--------------------------------------|
+| Test     | to discover mistakes       | apply the function to the inputs of  |
+|          | (Utypos" and logic)        | the examples . check that the        |
+|          |                            | outputs are as predicted             |
+|----------+----------------------------+--------------------------------------|
+
+
+** 
 ** Designing Conditional Functions
 
 ** Designing Functions for Compound Data

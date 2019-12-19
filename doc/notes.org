@@ -62,6 +62,14 @@ Expressions - pg 43
 |          |                            | outputs are as predicted             |
 |----------+----------------------------+--------------------------------------|
 
+GUIDELINE ON AUXILIARY FUNCTIONS
+Formulate auxiliary function definitions for every dependency between
+quantities mentioned in the problem statement or discovered
+with example calculations.
+
+GUIDELINE ON VARIABLE DEFINITIONS
+Give names to frequently used constants and use the names instead
+of the constants in programs.
 
 ** 
 ** Designing Conditional Functions

@@ -73,6 +73,41 @@ of the constants in programs.
 
 ** 
 ** Designing Conditional Functions
+Data Analysis and Definition: After we determine that a problem statement
+deals with distinct situations, we must identify all of them. The
+second step is a DATA DEFINITION, an idea that we will explore a lot
+more.
+
+Figure 6: Designing the body of a conditional function
+(Use with the recipe in figure 4
+
+|------------+-----------------------------+------------------------------------------|
+| Phase      | Goal                        | Activity                                 |
+|------------+-----------------------------+------------------------------------------|
+| Data       | to determine the distinct   | * inspect the problem statement for      |
+| Analysis   | situations a function deals | distinct situations                      |
+|            | with                        | * enumerate all possible situations      |
+|------------+-----------------------------+------------------------------------------|
+| Examples   | to provide an example       | * choose at least one example            |
+|            | per situation               | per situation                            |
+|            |                             | * for intervals or enumerations,         |
+|            |                             | the examples must include                |
+|            |                             | borderline cases                         |
+|------------+-----------------------------+------------------------------------------|
+| Body (1)   | to formulate a conditional  | * write down the skeleton of a cond      |
+| Conditions | expression                  | expression, with one clause per          |
+|            |                             | situation                                |
+|            |                             | * formulate one condition per situation, |
+|            |                             | using the parameters                     |
+|            |                             | * ensure that the conditions distinguish |
+|            |                             | the examples appropriately               |
+|------------+-----------------------------+------------------------------------------|
+| Body (2)   | to formulate the answers    | * deal with each cond-line separately    |
+| Answers    | for the cond-clauses        | * assume the condition holds and develop |
+|            |                             | a Scheme expression that computes the    |
+|            |                             | appropriate answer for this case         |
+|------------+-----------------------------+------------------------------------------|
+
 
 ** Designing Functions for Compound Data
 

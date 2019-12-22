@@ -408,16 +408,16 @@
 ;; name matches 'Fri.
 
 ;; Examples:
-;; (= (make-student 'Find 'Matthew 'Amanda)
-;;    (subst-teacher (make-student 'Find 'Matthew 'Amanda) 'Elise))
+;; (subst-teacher (make-student 'Find 'Matthew 'Amanda) 'Elise))
+;; => (make-student 'Find 'Matthew 'Amanda)
 
-;; (= (make-student 'Matthew 'Elsie)
-;;    (subst-teacher (make-student 'Find 'Matthew 'Fritz) 'Elsie))
+;; (subst-teacher (make-student 'Find 'Matthew 'Fritz) 'Elsie)
+;; => (make-student 'Matthew 'Elsie)
 
 ;; Template
 (defn process-student [a-student]
-  ,,, (:last a-student),,,
-  ,,, (:first a-student),,,
+  ,,, (:last a-student) ,,,
+  ,,, (:first a-student) ,,,
   ,,, (:teacher a-student) ,,,)
 
 ;; Definition:
@@ -435,4 +435,146 @@
          (subst-teacher (make-student 'Find 'Matthew 'Amanda) 'Elise)))
   (is (= (make-student 'Find 'Matthew 'Elsie)
          (subst-teacher (make-student 'Find 'Matthew 'Fritz) 'Elsie))))
+
+
+;; Example 2
+
+;; The first function, check, is supposed to return the last name of th
+;; student if the teacher's name is equal to a-teacher and'none otherwise:
+
+;; Examples
+;;  (check (make-student 'Wilson 'Fritz 'Harper) 'Harper) => 'Wilson
+;;  (check (make-student 'Wilson 'Fritz 'Lee) 'Harper) => 'none
+
+;; Body
+;; check : student 'symbol -> 'Symbol | 'none
+;; If the student's teacher is equal to passed teacher return students
+;; last name, otherwise 'none
+(defn check [a-student a-teacher]
+  (cond
+    (= (:teacher a-student) a-teacher) (:last a-student)
+    :else 'none))
+
+;; Test:
+(deftest test-check
+  (is (= 'Wilson (check (make-student 'Wilson 'Fritz 'Harper) 'Harper)))
+  (is (= 'none   (check (make-student 'Wilson 'Fritz 'Lee) 'Harper))))
+
+
+;; Example 3
+
+;; The second function, transfer, is supposed to produce a student struc-
+;; ture that contains the same information as a-student except for the
+;; teacher field, which should be a-teacher:
+
+;; Examples
+;; (transfer (make-student 'Wilson 'Fritz 'Harper) 'Lee) =>
+;; => (make-student 'Wilson 'Fritz 'Lee)
+;; (transfer (make-student 'Woops 'Helen 'Flatt) 'Fisler)
+;; => (make-student 'Woops 'Helen 'Fisler)
+
+;; Body
+(defn transfer [a-student a-teacher]
+  (make-student (:last a-student)
+                (:first a-student)
+                a-teacher))
+
+;; Tests
+(deftest test-transfer
+  (is (= (make-student 'Wilson 'Fritz 'Lee)
+         (transfer (make-student 'Wilson 'Fritz 'Harper) 'Lee)))
+  (is (= (make-student 'Woops 'Helen 'Fisler)
+         (transfer (make-student 'Woops 'Helen 'Flatt) 'Fisler))))
+
+
+;;; Exercises  6.5
+
+;; Exercise 6.5.1 Develop templates for functions that consume the following
+;; structures:
+;; 1. (define-struct movie (title producer))
+;; 2. (define-struct boyfriend (name hair eyes phone))
+;; 3. (define-struct cheerleader (name number))
+;; 4. (define-struct CD (artist title price))
+;; 5. (define-struct sweater (material size producer))
+
+;; 1. (define-struct movie (title producer))
+
+;; movie-template : movie -> ???
+(defn movie-template [a-movie]
+  ,,, (:title a-movie) ,,,
+  ,,, (:producer a-movie) ,,,)
+
+;; 2. (define-struct boyfriend (name hair eyes phone))
+
+;; boyfriend-template : boyfriend -> ???
+(defn boyfriend-template [a-boyfriend]
+  ,,, (:name a-boyfriend) ,,,
+  ,,, (:hair a-boyfriend) ,,,
+  ,,, (:eyes a-boyfriend) ,,,
+  ,,, (:phone a-boyfriend) ,,,)
+
+;; 3. (define-struct cheerleader (name number))
+
+;; cheerleader-template : cheerleader => ???
+(defn cheerleader-template [a-cheerleader]
+  ,,, (:name a-cheerleader) ,,,
+  ,,, (:number a-cheerleader) ,,,)
+
+;; 4. (define-struct CD (artist title price))
+
+;; CD-template : CD -> ???
+(defn CD-template [a-CD]
+  ,,, (:artist a-CD) ,,,
+  ,,, (:title a-CD) ,,,
+  ,,, (:price a-CD) ,,,)
+
+;; 5. (define-struct sweater (material size producer))
+
+;; seater-template : sweater -> ???
+(defn sweater-template [a-sweater]
+  ,,, (:material a-sweater) ,,,
+  ,,, (:size a-sweater) ,,,
+  ,,, (:producer a-sweater) ,,,)
+
+
+;; Exercise 6.5.2 Develop the function time->seconds, which consumes a time
+;; structure (see exercise 6.4.2) and produces the number of seconds since
+;; midnight that the time structure represents.
+
+;; A time is a map
+(defn make-time [hours minutes seconds]
+  {:hours hours :minutes minutes :seconds seconds})
+;; where :  hours is a number
+;;          minutes is a number
+;;          seconds is a number
+
+;; Example
+;; (time->seconds (make-time 0 0 0))  => 0
+;; (time->seconds (make-time 12 30 2)) => 45002
+
+;; time-seconds : time -> number
+;; Calculates the seconds since midnight give a time object.
+(defn time-seconds [a-time]
+  (+ (* 3600 (:hours a-time))
+     (* 60 (:minutes a-time))
+     (* 1 (:seconds a-time))))
+
+(deftest test-time-seconds
+  (is (= 0 (time-seconds (make-time 0 0 0))))
+  (is (= 1 (time-seconds (make-time 0 0 1))))
+  (is (= 60 (time-seconds (make-time 0 1 0))))
+  (is (= 3600 (time-seconds (make-time 1 0 0))))
+  (is (= 45002 (time-seconds (make-time 12 30 2))))
+  (is (= 86400 (time-seconds (make-time 24 0 0)))))
+
+
+
+;; 6.6 Extended Exercise: Moving Circles and Rectangles.  pg 106
+
+;; FIXME:  Skip
+
+
+;; 6.7 Extended Exercise: Hangman  pg 109
+
+;; FIXME: Skip
 

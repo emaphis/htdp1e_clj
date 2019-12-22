@@ -206,7 +206,56 @@ Figure 12: Designing a function for compound data
   (is (= (make-student 'Find 'Matthew 'Elsie)
          (subst-teacher (make-student 'Find 'Matthew 'Fritz) 'Elsie))))
 
+*** Two more student examples
 
+;; Example 2
+
+;; The first function, check, is supposed to return the last name of th
+;; student if the teacher's name is equal to a-teacher and'none otherwise:
+
+;; Examples
+;;  (check (make-student 'Wilson 'Fritz 'Harper) 'Harper) => 'Wilson
+;;  (check (make-student 'Wilson 'Fritz 'Lee) 'Harper) => 'none
+
+;; Body
+;; check : student 'symbol -> 'Symbol | 'none
+;; If the student's teacher is equal to passed teacher return students
+;; last name, otherwise 'none
+(defn check [a-student a-teacher]
+  (cond
+    (= (:teacher a-student) a-teacher) (:last a-student)
+    :else 'none))
+
+;; Test:
+(deftest test-check
+  (is (= 'Wilson (check (make-student 'Wilson 'Fritz 'Harper) 'Harper)))
+  (is (= 'none   (check (make-student 'Wilson 'Fritz 'Lee) 'Harper))))
+
+
+;; Example 3
+
+;; The second function, transfer, is supposed to produce a student struc-
+;; ture that contains the same information as a-student except for the
+;; teacher field, which should be a-teacher:
+
+;; Examples
+;; (transfer (make-student 'Wilson 'Fritz 'Harper) 'Lee) =>
+;; => (make-student 'Wilson 'Fritz 'Lee)
+;; (transfer (make-student 'Woops 'Helen 'Flatt) 'Fisler)
+;; => (make-student 'Woops 'Helen 'Fisler)
+
+;; Body
+(defn transfer [a-student a-teacher]
+  (make-student (:last a-student)
+                (:first a-student)
+                a-teacher))
+
+;; Tests
+(deftest test-transfer
+  (is (= (make-student 'Wilson 'Fritz 'Lee)
+         (transfer (make-student 'Wilson 'Fritz 'Harper) 'Lee)))
+  (is (= (make-student 'Woops 'Helen 'Fisler)
+         (transfer (make-student 'Woops 'Helen 'Flatt) 'Fisler))))
 
 ** Designing Functions for Mixed Data
 

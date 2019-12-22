@@ -665,3 +665,21 @@
 ;; Make up additional examples. First determine the number of solutions by
 ;; hand, then with DrScheme
 ;; FIXME: Finish the problem
+
+
+;; Example
+(defn cond-expr [n]
+  (cond
+    (= n 0) "zero"
+    (= n 1) "one"
+    (= n 2)
+    (do (+ 1 2)
+        (+ 2 3)
+        "two")
+    :else "three"))
+
+(deftest test-cond-expr
+  (is (= "zero" (cond-expr 0)))
+  (is (= "one" (cond-expr 1)))
+  (is (= "two" (cond-expr 2)))
+  (is (= "three" (cond-expr 3))))

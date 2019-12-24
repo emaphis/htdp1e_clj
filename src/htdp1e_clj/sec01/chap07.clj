@@ -449,3 +449,154 @@
     (car? vehicle) (,,, (:passengers vehicle) ,,, (:color vehicle) ,,,)
     (subway? vehicle) (,,, (:pasengers vehicle) ,,, (:route vehicle) ,,,)))
 
+
+;;; 7.3 Composing Functions, Revisited.  pg. 125
+
+;; Composed templates for auxiliary functions.
+
+;; Data Definition:
+;; A shape is either a circle or a squre
+
+;; a circle is a map
+(defn make-circle [center radius]
+  {:center center :radius radius})
+;; where is a posn and s is a number:
+(defn circle? [shape]
+  (and (posn? (:center shape)) (number? (:radius shape))))
+
+;; Or a square is map
+(defn make-square [nw-corner length]
+  {:nw-corner nw-corner :length length})
+;; where nw-corner is a posn and is length is a number
+(defn square? [shape]
+  (and (posn? (:nw-corner shape)) (number? (:length shape))))
+
+
+;; Examples:
+
+(make-square (make-posn 20 20) 3)
+;; => {:nw {:x 20, :y 20}, :length 3}
+(square? (make-square (make-posn 20 20) 3)) ;; => true
+(make-square (make-posn 2 20) 3)
+;; => {:nw {:x 2, :y 20}, :length 3}
+(square? (make-square (make-posn 2 20) 3)) ;; => true
+(circle? (make-square (make-posn 2 20) 3)) ;; => false
+(make-circle (make-posn 10 99) 1)
+;; => {:center {:x 10, :y 99}, :radius 1}
+(circle? (make-circle (make-posn 10 99) 1)) ;; => true
+
+;; Template:
+
+;; circle -> ???
+(defn fun-circle [circle]
+  (,,, (:center circle) ,,, (:radius circle) ,,,))
+
+;; square -> ???
+(defn fun-square [square]
+  (,,, (:nw-corner square) ,,, (:length square) ,,,))
+
+;; shape -> ???
+(defn fun-shape [shape]
+  (cond
+    (circle? shape) (fun-circle shape)
+    (square? shape) (fun-square shape)))
+
+;; Body:
+
+;; perimeter-circle : circle -> number
+;; Calculates the perimeter of a-circle
+(defn perimeter-circle [a-circle]
+  (* (* 2 (:radius a-circle)) Math/PI))
+
+;; perimeter-square : square -> number
+;; Calculates the perimeter of a-square
+(defn perimeter-square [a-square]
+  (* (:length a-square) 4))
+
+
+;; perimeter : shape -> number
+;; compute the perimeter of a-shape
+(defn perimeter [a-shape]
+  (cond
+    (square? a-shape) (perimeter-square a-shape)
+    (circle? a-shape) (perimeter-circle a-shape)))
+
+;; Tests
+
+(deftest test-perimeter
+  (is (= 4 (perimeter-square (make-square (make-posn 2 3) 1))))
+  (is (= 12 (perimeter-square (make-square (make-posn 20 20) 3))))
+  (is (= 12 (perimeter-square (make-square (make-posn 2 20) 3))))
+  (is (= (* 2 Math/PI) (perimeter-circle (make-circle (make-posn 1 1) 1))))
+  (is (= (* 6 Math/PI) (perimeter-circle (make-circle (make-posn 10 99) 3))))
+  (is (= 12 (perimeter (make-square (make-posn 2 20) 3))))
+  (is (= (* 2 Math/PI) (perimeter (make-circle (make-posn 1 1) 1)))))
+
+
+;;; Exercise 7.3
+
+;; Exercise 7.3.1 Modify the two versions of perimeter so that they also
+;; process rectangles. For our purposes, the description of a rectangle
+;; includes its upper-left corner, its width, and its height.
+
+;; Rectangle is a map
+(defn make-rectangle [nw-corner width height]
+  {:nw-corner nw-corner :width width :height height})
+;; where nw-corner is a posn and width and height are numbers.
+(defn rectangle? [shape]
+  (and (posn? (:nw-corner shape))
+       (number? (:width shape))
+       (number? (:height shape))))
+
+(make-rectangle (make-posn 3 4) 2 4)
+;; => {:nw-corner {:x 3, :y 4}, :width 2, :height 4}
+(rectangle? (make-rectangle (make-posn 1 1) 2 4)) ;; => true
+
+;; Template
+
+;; fun-rectangle : rectangle -> ???
+(defn fun-rectangle [a-rectangle]
+  (,,, (:nw-corner a-rectangle) ,,,
+   ,,, (:width a-rectangle) ,,,
+   ,,, (:heigth a-rectangle) ,,,))
+
+;; a shape is a rectangle or a square or a cirlce
+;; shape -> ???
+(defn fun-shape [shape]
+  (cond
+    (circle? shape) (fun-circle shape)
+    (square? shape) (fun-square shape)
+    (rectangle? shape) (fun-rectangle shape)))
+
+;; perimeter-rectangle : rectangle -> number
+;; calculate perimeter of a-rectangle
+(defn perimeter-rectangle [a-rectangle]
+  (+ (* 2 (:width a-rectangle))
+     (* 2 (:height a-rectangle))))
+
+;; perimeter : shape -> number
+;; compute the perimeter of a-shape
+(defn perimeter [a-shape]
+  (cond
+    (rectangle? a-shape) (perimeter-rectangle a-shape) 
+    (square? a-shape) (perimeter-square a-shape)
+    (circle? a-shape) (perimeter-circle a-shape)))
+
+;; tests
+
+(deftest test-perimeter
+  (is (= 4 (perimeter-square (make-square (make-posn 2 3) 1))))
+  (is (= 12 (perimeter-square (make-square (make-posn 20 20) 3))))
+  (is (= 12 (perimeter-square (make-square (make-posn 2 20) 3))))
+  (is (= 12 (perimeter-rectangle (make-rectangle (make-posn 1 1) 2 4))))
+  (is (= (* 2 Math/PI) (perimeter-circle (make-circle (make-posn 1 1) 1))))
+  (is (= (* 6 Math/PI) (perimeter-circle (make-circle (make-posn 10 99) 3))))
+  (is (= 12 (perimeter (make-square (make-posn 2 20) 3))))
+  (is (= (* 2 Math/PI) (perimeter (make-circle (make-posn 1 1) 1))))
+  (is (= 12 (perimeter (make-rectangle (make-posn 1 1) 2 4)))))
+
+
+
+;;; 7.4  Extended Exercise: Moving Shapes -  pg. 127
+;; FIXME:  not complete
+

@@ -29,7 +29,7 @@ Table of Contents for PDF file
 6.5 Designing Functions for Compound Data
 6.6 Extended Exercise: Moving Circles and Rectangles
 6.7 Extended Exercise: Hangman
-** 7 The Varieties of Data .............................. 121
+** 7 The Varieties of Data .............................. 112
 7.1 Mixing and Distinguishing Data
 7.2 Designing Functions for Mixed Data
 7.3 Composing Functions, Revisited
@@ -206,3 +206,4 @@ Errors in Advanced Scheme
 43.1 More Practice with Vectors
 43.2 Collections of Structures with Cycles
 43.3 Backtracking with State
+

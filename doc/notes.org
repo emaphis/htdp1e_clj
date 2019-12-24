@@ -258,6 +258,108 @@ Figure 12: Designing a function for compound data
          (transfer (make-student 'Woops 'Helen 'Flatt) 'Fisler))))
 
 ** Designing Functions for Mixed Data
+;; Distinguish classes of data with predicats
+
+Designing a function for mixed data
+
+| Phase    | Goal                      | Activity                           |   |   |
+|----------+---------------------------+------------------------------------+---+---|
+| Data     | * to formulate a data     | * determine how many distinct      |   |   |
+| Analysis | definition.               | classes of "objects" make up the   |   |   |
+| and      |                           | classes of problem data            |   |   |
+| Design   |                           | * enumerate the alternatives in a  |   |   |
+|          |                           | data definition                    |   |   |
+|          |                           | * formulate a data definition for  |   |   |
+|          |                           | each alternative, if it is a form  |   |   |
+|          |                           | of compound data                   |   |   |
+|----------+---------------------------+------------------------------------+---+---|
+| Contract | * to name the function;   | name the function, the classes of  |   |   |
+| and      | to specify its classes of | input data, the class of output    |   |   |
+| Header   | input data and its        | data ,and specify its purpose:     |   |   |
+| Purpose  | class of output data;     | ;; name : inl in2 ... -> out       |   |   |
+|          | to describe its purpose;  | ;; to compute ... from xl ...      |   |   |
+|          | to formulate a header     | (defn name [x1 x2 ...] ...)        |   |   |
+|----------+---------------------------+------------------------------------+---+---|
+| Examples | * to characterize the     | * create examples of the input-    |   |   |
+|          | input-output relationship | output relationship.               |   |   |
+|          | via examples              | * make sure there is at least on   |   |   |
+|          |                           | example per subclass               |   |   |
+|----------+---------------------------+------------------------------------+---+---|
+| Template | * to formulate an outline | * introduce a cond-expression      |   |   |
+|          |                           | with one clause per subclass.      |   |   |
+|          |                           | * formulate a condition for each   |   |   |
+|          |                           | class case, using built-in and     |   |   |
+|          |                           | predefined predicates.             |   |   |
+|----------+---------------------------+------------------------------------+---+---|
+| Body     | * to define the function  | * develop a Clojure expression     |   |   |
+|          |                           | for each cond-line (an answer),    |   |   |
+|          |                           | assuming that the condition holds. |   |   |
+|----------+---------------------------+------------------------------------+---+---|
+| Test     | * to discover mistakes    | * apply the function to the inputs |   |   |
+|          | ("typos" and logic)       | of the examples                    |   |   |
+|          |                           | * check that the outputs are       |   |   |
+|          |                           | predicted                          |   |   |
+|----------+---------------------------+------------------------------------+---+---|
+
+*** Example
+
+;; Data Definition:
+;; A shape is either
+;; a circle map
+(defn make-circle [center radius]
+  {:center center :radius radius})
+;; where is a posn and s is a number:
+(defn circle? [shape]
+  (and (posn? (:center shape)) (number? (:radius shape))))
+;; Or a square map
+(defn make-square [nw-corner length]
+  {:nw-corner nw-corner :length length})
+;; where nw-corner is a posn and is length is a number
+(defn square? [shape]
+  (and (posn? (:nw-corner shape)) (number? (:length shape))))
+
+
+;; Examples:
+
+(make-square (make-posn 20 20) 3)
+;; => {:nw {:x 20, :y 20}, :length 3}
+(square? (make-square (make-posn 20 20) 3)) ;; => true
+(make-square (make-posn 2 20) 3)
+;; => {:nw {:x 2, :y 20}, :length 3}
+(square? (make-square (make-posn 2 20) 3)) ;; => true
+(circle? (make-square (make-posn 2 20) 3)) ;; => false
+(make-circle (make-posn 10 99) 1)
+;; => {:center {:x 10, :y 99}, :radius 1}
+(circle? (make-circle (make-posn 10 99) 1)) ;; => true
+
+;; Template:
+
+;; shape-template : shape -> ???
+(defn shape-template [shape]
+  (cond
+    (square? shape)
+    (,,, (:nw-corner shape) ,,, (:length shape))
+    (circle? shape)
+    (,,, (:center shape) ,,, (:radius shape) ,,, )))
+
+;; Body:
+
+;; perimeter : shape -> number
+;; compute the perimeter of a-shape
+(defn perimeter [a-shape]
+  (cond
+    (square? a-shape) (* (:length a-shape) 4)
+    (circle? a-shape) (* (* 2 (:radius a-shape)) Math/PI)))
+
+;; Tests
+
+(deftest test-perimeter
+  (is (= 4 (perimeter (make-square (make-posn 2 3) 1))))
+  (is (= 12 (perimeter (make-square (make-posn 20 20) 3))))
+  (is (= 12 (perimeter (make-square (make-posn 2 20) 3))))
+  (is (= (* 2 Math/PI) (perimeter (make-circle (make-posn 1 1) 1)))) 
+  (is (= (* 6 Math/PI) (perimeter (make-circle (make-posn 10 99) 3)))))
+
 
 ** Designing Functions for Self-Referential Data Definitions
 

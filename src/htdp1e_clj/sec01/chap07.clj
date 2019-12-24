@@ -360,6 +360,17 @@
 (defn monkey? [any]
   (and (number? (:intelligence any)) (number? (:space any))))
 
+;; examples:
+(def a-spider (make-spider 8 1))
+(def an-elephant (make-elephant 100))
+(def a-monkey (make-monkey 50 10))
+
+(spider? a-spider) ;; => true
+(spider? an-elephant) ;; => false
+(elephant? an-elephant) ;; => true
+(monkey? a-monkey) ;; => true
+(monkey? a-spider) ;; => false
+
 ;; zoo-animal-template : zoo-animal -> ???
 ;; consume a zoo-animal
 (defn zoo-animal-template [an-animal]
@@ -372,4 +383,69 @@
     (,,, (:intelligence an-animal) ,,, (:space an-animal) ,,,)))
 
 
+;; fits? : zoo-animal number ->  boolean
+;; returns true if an-animal fits in the passed size of cate.
+(defn fits? [an-animal cage-size]
+  (<= (:space an-animal) cage-size))
+
+
+;; tests
+(def cage-size 90)
+
+(deftest test-fits
+  (is (= true (fits? (make-spider 8 1) cage-size)))
+  (is (= true (fits? (make-monkey 50 10) cage-size)))
+  (is (= false (fits? (make-elephant 100) cage-size))))
+
+
+;; Exercise 7.2.2 The administrators of metropolitan transportation agencies
+;; manage fleets of vehicles. Develop structure and data definitions for a col-
+;; election of such vehicles. The collection should include at least buses, limos,
+;; cars, and subways. Add at least two attributes per class of vehicle.
+;; Then develop a template for functions that consume vehicles.
+
+;; `vehicle` is one of bus, limo, car, subway.
+;; let's use a type tag to distinguish between tags.
+
+;; bus is a map
+(defn make-bus [pasengers route company]
+  {:pasengers pasengers :route route :company company})
+;; where  passengers is a number route and company are symbols
+(defn bus? [vehicle]
+  (and (number? (:pasengers vehicle))
+       (symbol? (:route vehicle))
+       (symbol? (:company vehicle))))
+
+;; limo is a map
+(defn make-limo [passengers company]
+  {:passengers passengers :company company})
+;; where passengers is a number and :company is symbol
+(defn limo? [vehicle]
+  (and (number? (:pasengers vehicle))
+       (symbol? (:company vehicle))))
+
+;; car is a map
+(defn make-car [passengers color]
+  {:passengers passengers :color color})
+;; where passengers is a number and color is a symbol
+(defn car? [vehicle]
+  (and (number? (:passengers vehicle))
+       (symbol? (:color vehicle))))
+
+;; subway is a map
+(defn make-subway [passengers route]
+  {:passengers passengers :route route})
+;; where passengers os a number and route is a symbol.
+(defn subway? [vehicle]
+  (and (number? (:pasengers vehicle))
+       (symbol? (:route vehicle))))
+
+;; vehicle-template :  vehicle -> ??? 
+;; do something with a vehicle
+(defn vehicle-template [vehicle]
+  (cond
+    (bus? vehicle) (,,, (:passengers vehicle) ,,, (:route vehicle) ,,, (:company vehicle))
+    (limo? vehicle) (,,, (:pasengers vehicle) ,,, (:company vehicle),,,)
+    (car? vehicle) (,,, (:passengers vehicle) ,,, (:color vehicle) ,,,)
+    (subway? vehicle) (,,, (:pasengers vehicle) ,,, (:route vehicle) ,,,)))
 
